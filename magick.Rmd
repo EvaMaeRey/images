@@ -1,0 +1,170 @@
+---
+title: "Image Magick w/ {magick}"
+subtitle: "With flipbookr and xaringan"
+author: "Gina Reynolds, December 2019"
+output:
+  xaringan::moon_reader:
+    lib_dir: libs
+    css: [default, hygge, ninjutsu]
+    nature:
+      ratio: 20:10
+      highlightStyle: github
+      highlightLines: true
+      countIncrementalSlides: false
+---
+
+
+
+```{r, include = F}
+# This is the recommended set up for flipbooks
+# you might think about setting cache to TRUE as you gain practice --- building flipbooks from scratch can be time consuming
+knitr::opts_chunk$set(fig.width = 6, message = FALSE, warning = FALSE, comment = "", cache = T, fig.retina = 3)
+library(flipbookr)
+library(tidyverse)
+```
+
+
+`r chunk_reveal("magick")`
+
+```{r magick, include = F}
+library(magick)
+path <- system.file("extdata", "cow.jpg", package = "cowplot")
+image_read(path = path) %>% 
+  image_border(color = "red") %>% 
+  image_colorize(opacity = 40, color = "oldlace")
+```
+
+---
+class: center, inverse, middle
+
+# Annotation
+
+---
+
+`r chunk_reveal("annotate")`
+
+```{r annotate, include = F}
+image_read(path = path) %>% 
+  image_annotate(text = "Hello to the World!", size = 30) %>%
+  image_annotate(text = "Hello to\nthe World!", 
+                 size = 30, gravity = "Center") %>%
+  image_annotate(text = "Hello", 
+                 size = 30, gravity = "North") %>%
+  image_annotate(text = "Hello", size = 50, 
+                 style = "italic", gravity = "West") %>%
+  image_annotate(text = "Bye", size = 50, font = "Helvetica", 
+                 gravity = "NorthEast", ) %>%
+  image_annotate(text = "We", size = 50, 
+                 weight = 900, gravity = "East") %>%
+  image_annotate(text = "Hello", size = 50, 
+                 strokecolor = "red", 
+                 gravity = "SouthWest") %>%
+  image_annotate(text = "Hello", size = 50, 
+                 color = "blue", gravity = "SouthEast") %>%
+  image_annotate(text = "Hello", size = 50, location = "+10+20",
+                 color = "blue", gravity = "SouthEast") %>%
+  image_annotate(text = "Hello", size = 50, location = "+10+20",
+                 color = "blue", gravity = "SouthEast")
+```
+
+---
+
+`r chunk_reveal("chop", break_type = "rotate")`
+
+
+```{r chop, eval = F, echo = F}
+image_read(path = path) %>% 
+  image_chop(geometry = "x300") #ROTATE
+  image_chop(geometry = "500x300+10+20") #ROTATE
+```
+
+
+---
+
+`r chunk_reveal("magick2", break_type = "rotate")`
+
+```{r magick2, include = F}
+image_read(path = path) %>% 
+  image_border(color = "red") %>% #ROTATE
+  image_colorize(opacity = 40, color = "oldlace") %>% #ROTATE
+  image_colorize(opacity = 30, color = "steelblue") %>% #ROTATE
+  image_colorize(opacity = 80, color = "oldlace") %>% #ROTATE
+  image_average() %>% #ROTATE
+  image_background(color = "blue", flatten = TRUE) %>% #ROTATE
+  image_channel(channel = "hue") %>% #ROTATE
+  image_channel(channel = "cyan") %>% #ROTATE
+  image_canny(geometry = "0x1+10%+30%") %>% #ROTATE
+  image_canny(geometry = "0x1+20%+10%")
+```
+
+
+---
+
+
+`r chunk_reveal("effects", break_type = "rotate")`
+
+```{r effects, eval = F, echo = F}
+image_read(path = path) %>% 
+  image_despeckle(times = 1L) %>% #ROTATE
+  image_reducenoise(radius = 1L) %>% #ROTATE
+  image_noise(noisetype = "gaussian") %>% #ROTATE
+  image_blur(radius = 1, sigma = 0.5) %>% #ROTATE
+  image_charcoal(radius = 1, sigma = 0.5) %>% #ROTATE
+  image_oilpaint(radius = 1) %>% #ROTATE
+  image_emboss(radius = 1, sigma = 0.5) %>% #ROTATE
+  image_implode(factor = 0.5) %>% #ROTATE
+  image_negate() %>% #ROTATE
+```
+
+---
+
+`r chunk_reveal("ggplot")`
+
+```{r ggplot, include = F}
+library(ggplot2)
+ggplot(data = cars) +
+  aes(x = speed, y = dist) +
+  geom_point(size = 5) ->
+g
+
+ggsave(filename = "my_plot.png", plot = g,
+       width = 8, height = 6)
+
+"my_plot.png" %>% 
+  image_read(path = .) %>% 
+  image_annotate(text = "hello\nthere", size = 100,
+                 location = "+150+50", degrees = 45) %>% 
+  image_emboss() %>% 
+  image_negate()
+```
+
+
+
+
+---
+
+
+```{r}
+
+```
+
+
+
+---
+
+
+```{r}
+
+```
+
+
+
+```{css, eval = TRUE, echo = FALSE}
+.remark-code{line-height: 1.5; font-size: 80%}
+
+@media print {
+  .has-continuation {
+    display: block;
+  }
+}
+```

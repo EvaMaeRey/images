@@ -1,0 +1,1258 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+  <head>
+    <title>Image Magick w/ {magick}</title>
+    <meta charset="utf-8" />
+    <meta name="author" content="Gina Reynolds, December 2019" />
+    <link href="libs/remark-css-0.0.1/default.css" rel="stylesheet" />
+    <link href="libs/remark-css-0.0.1/hygge.css" rel="stylesheet" />
+    <link href="libs/remark-css-0.0.1/ninjutsu.css" rel="stylesheet" />
+  </head>
+  <body>
+    <textarea id="source">
+class: center, middle, inverse, title-slide
+
+# Image Magick w/ {magick}
+## With flipbookr and xaringan
+### Gina Reynolds, December 2019
+
+---
+
+
+
+
+
+
+
+count: false
+ 
+
+.left-panel-magick-auto[
+
+```r
+*library(magick)
+```
+]
+ 
+.right-panel-magick-auto[
+
+]
+
+---
+count: false
+ 
+
+.left-panel-magick-auto[
+
+```r
+library(magick)  
+*path &lt;- system.file("extdata", "cow.jpg", package = "cowplot")
+```
+]
+ 
+.right-panel-magick-auto[
+
+]
+
+---
+count: false
+ 
+
+.left-panel-magick-auto[
+
+```r
+library(magick)  
+path &lt;- system.file("extdata", "cow.jpg", package = "cowplot")  
+*image_read(path = path)
+```
+]
+ 
+.right-panel-magick-auto[
+&lt;img src="magick_files/figure-html/magick_auto_3_output-1.png" width="507" /&gt;
+]
+
+---
+count: false
+ 
+
+.left-panel-magick-auto[
+
+```r
+library(magick)  
+path &lt;- system.file("extdata", "cow.jpg", package = "cowplot")  
+image_read(path = path) %&gt;%  
+* image_border(color = "red")
+```
+]
+ 
+.right-panel-magick-auto[
+&lt;img src="magick_files/figure-html/magick_auto_4_output-1.png" width="516" /&gt;
+]
+
+---
+count: false
+ 
+
+.left-panel-magick-auto[
+
+```r
+library(magick)  
+path &lt;- system.file("extdata", "cow.jpg", package = "cowplot")  
+image_read(path = path) %&gt;%  
+  image_border(color = "red") %&gt;%  
+* image_colorize(opacity = 40, color = "oldlace")
+```
+]
+ 
+.right-panel-magick-auto[
+&lt;img src="magick_files/figure-html/magick_auto_5_output-1.png" width="516" /&gt;
+]
+
+&lt;style&gt;
+.left-panel-magick-auto {
+  color: #777;
+  width: 38.6138613861386%;
+  height: 92%;
+  float: left;
+  font-size: 80%
+}
+.right-panel-magick-auto {
+  width: 59.4059405940594%;
+  float: right;
+  padding-left: 1%;
+  font-size: 80%
+}
+.middle-panel-magick-auto {
+  width: 0%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+&lt;/style&gt;
+
+
+
+
+
+---
+class: center, inverse, middle
+
+# Annotation
+
+---
+
+count: false
+ 
+
+.left-panel-annotate-auto[
+
+```r
+*image_read(path = path)
+```
+]
+ 
+.right-panel-annotate-auto[
+&lt;img src="magick_files/figure-html/annotate_auto_1_output-1.png" width="507" /&gt;
+]
+
+---
+count: false
+ 
+
+.left-panel-annotate-auto[
+
+```r
+image_read(path = path) %&gt;%  
+* image_annotate(text = "Hello to the World!", size = 30)
+```
+]
+ 
+.right-panel-annotate-auto[
+&lt;img src="magick_files/figure-html/annotate_auto_2_output-1.png" width="507" /&gt;
+]
+
+---
+count: false
+ 
+
+.left-panel-annotate-auto[
+
+```r
+image_read(path = path) %&gt;%  
+  image_annotate(text = "Hello to the World!", size = 30) %&gt;%  
+* image_annotate(text = "Hello to\nthe World!",
+*                size = 30, gravity = "Center")
+```
+]
+ 
+.right-panel-annotate-auto[
+&lt;img src="magick_files/figure-html/annotate_auto_3_output-1.png" width="507" /&gt;
+]
+
+---
+count: false
+ 
+
+.left-panel-annotate-auto[
+
+```r
+image_read(path = path) %&gt;%  
+  image_annotate(text = "Hello to the World!", size = 30) %&gt;%  
+  image_annotate(text = "Hello to\nthe World!",  
+                 size = 30, gravity = "Center") %&gt;%  
+* image_annotate(text = "Hello",
+*                size = 30, gravity = "North")
+```
+]
+ 
+.right-panel-annotate-auto[
+&lt;img src="magick_files/figure-html/annotate_auto_4_output-1.png" width="507" /&gt;
+]
+
+---
+count: false
+ 
+
+.left-panel-annotate-auto[
+
+```r
+image_read(path = path) %&gt;%  
+  image_annotate(text = "Hello to the World!", size = 30) %&gt;%  
+  image_annotate(text = "Hello to\nthe World!",  
+                 size = 30, gravity = "Center") %&gt;%  
+  image_annotate(text = "Hello",  
+                 size = 30, gravity = "North") %&gt;%  
+* image_annotate(text = "Hello", size = 50,
+*                style = "italic", gravity = "West")
+```
+]
+ 
+.right-panel-annotate-auto[
+&lt;img src="magick_files/figure-html/annotate_auto_5_output-1.png" width="507" /&gt;
+]
+
+---
+count: false
+ 
+
+.left-panel-annotate-auto[
+
+```r
+image_read(path = path) %&gt;%  
+  image_annotate(text = "Hello to the World!", size = 30) %&gt;%  
+  image_annotate(text = "Hello to\nthe World!",  
+                 size = 30, gravity = "Center") %&gt;%  
+  image_annotate(text = "Hello",  
+                 size = 30, gravity = "North") %&gt;%  
+  image_annotate(text = "Hello", size = 50,  
+                 style = "italic", gravity = "West") %&gt;%  
+* image_annotate(text = "Bye", size = 50, font = "Helvetica",
+*                gravity = "NorthEast", )
+```
+]
+ 
+.right-panel-annotate-auto[
+&lt;img src="magick_files/figure-html/annotate_auto_6_output-1.png" width="507" /&gt;
+]
+
+---
+count: false
+ 
+
+.left-panel-annotate-auto[
+
+```r
+image_read(path = path) %&gt;%  
+  image_annotate(text = "Hello to the World!", size = 30) %&gt;%  
+  image_annotate(text = "Hello to\nthe World!",  
+                 size = 30, gravity = "Center") %&gt;%  
+  image_annotate(text = "Hello",  
+                 size = 30, gravity = "North") %&gt;%  
+  image_annotate(text = "Hello", size = 50,  
+                 style = "italic", gravity = "West") %&gt;%  
+  image_annotate(text = "Bye", size = 50, font = "Helvetica",  
+                 gravity = "NorthEast", ) %&gt;%  
+* image_annotate(text = "We", size = 50,
+*                weight = 900, gravity = "East")
+```
+]
+ 
+.right-panel-annotate-auto[
+&lt;img src="magick_files/figure-html/annotate_auto_7_output-1.png" width="507" /&gt;
+]
+
+---
+count: false
+ 
+
+.left-panel-annotate-auto[
+
+```r
+image_read(path = path) %&gt;%  
+  image_annotate(text = "Hello to the World!", size = 30) %&gt;%  
+  image_annotate(text = "Hello to\nthe World!",  
+                 size = 30, gravity = "Center") %&gt;%  
+  image_annotate(text = "Hello",  
+                 size = 30, gravity = "North") %&gt;%  
+  image_annotate(text = "Hello", size = 50,  
+                 style = "italic", gravity = "West") %&gt;%  
+  image_annotate(text = "Bye", size = 50, font = "Helvetica",  
+                 gravity = "NorthEast", ) %&gt;%  
+  image_annotate(text = "We", size = 50,  
+                 weight = 900, gravity = "East") %&gt;%  
+* image_annotate(text = "Hello", size = 50,
+*                strokecolor = "red",
+*                gravity = "SouthWest")
+```
+]
+ 
+.right-panel-annotate-auto[
+&lt;img src="magick_files/figure-html/annotate_auto_8_output-1.png" width="507" /&gt;
+]
+
+---
+count: false
+ 
+
+.left-panel-annotate-auto[
+
+```r
+image_read(path = path) %&gt;%  
+  image_annotate(text = "Hello to the World!", size = 30) %&gt;%  
+  image_annotate(text = "Hello to\nthe World!",  
+                 size = 30, gravity = "Center") %&gt;%  
+  image_annotate(text = "Hello",  
+                 size = 30, gravity = "North") %&gt;%  
+  image_annotate(text = "Hello", size = 50,  
+                 style = "italic", gravity = "West") %&gt;%  
+  image_annotate(text = "Bye", size = 50, font = "Helvetica",  
+                 gravity = "NorthEast", ) %&gt;%  
+  image_annotate(text = "We", size = 50,  
+                 weight = 900, gravity = "East") %&gt;%  
+  image_annotate(text = "Hello", size = 50,  
+                 strokecolor = "red",  
+                 gravity = "SouthWest") %&gt;%  
+* image_annotate(text = "Hello", size = 50,
+*                color = "blue", gravity = "SouthEast")
+```
+]
+ 
+.right-panel-annotate-auto[
+&lt;img src="magick_files/figure-html/annotate_auto_9_output-1.png" width="507" /&gt;
+]
+
+---
+count: false
+ 
+
+.left-panel-annotate-auto[
+
+```r
+image_read(path = path) %&gt;%  
+  image_annotate(text = "Hello to the World!", size = 30) %&gt;%  
+  image_annotate(text = "Hello to\nthe World!",  
+                 size = 30, gravity = "Center") %&gt;%  
+  image_annotate(text = "Hello",  
+                 size = 30, gravity = "North") %&gt;%  
+  image_annotate(text = "Hello", size = 50,  
+                 style = "italic", gravity = "West") %&gt;%  
+  image_annotate(text = "Bye", size = 50, font = "Helvetica",  
+                 gravity = "NorthEast", ) %&gt;%  
+  image_annotate(text = "We", size = 50,  
+                 weight = 900, gravity = "East") %&gt;%  
+  image_annotate(text = "Hello", size = 50,  
+                 strokecolor = "red",  
+                 gravity = "SouthWest") %&gt;%  
+  image_annotate(text = "Hello", size = 50,  
+                 color = "blue", gravity = "SouthEast") %&gt;%  
+* image_annotate(text = "Hello", size = 50, location = "+10+20",
+*                color = "blue", gravity = "SouthEast")
+```
+]
+ 
+.right-panel-annotate-auto[
+&lt;img src="magick_files/figure-html/annotate_auto_10_output-1.png" width="507" /&gt;
+]
+
+---
+count: false
+ 
+
+.left-panel-annotate-auto[
+
+```r
+image_read(path = path) %&gt;%  
+  image_annotate(text = "Hello to the World!", size = 30) %&gt;%  
+  image_annotate(text = "Hello to\nthe World!",  
+                 size = 30, gravity = "Center") %&gt;%  
+  image_annotate(text = "Hello",  
+                 size = 30, gravity = "North") %&gt;%  
+  image_annotate(text = "Hello", size = 50,  
+                 style = "italic", gravity = "West") %&gt;%  
+  image_annotate(text = "Bye", size = 50, font = "Helvetica",  
+                 gravity = "NorthEast", ) %&gt;%  
+  image_annotate(text = "We", size = 50,  
+                 weight = 900, gravity = "East") %&gt;%  
+  image_annotate(text = "Hello", size = 50,  
+                 strokecolor = "red",  
+                 gravity = "SouthWest") %&gt;%  
+  image_annotate(text = "Hello", size = 50,  
+                 color = "blue", gravity = "SouthEast") %&gt;%  
+  image_annotate(text = "Hello", size = 50, location = "+10+20",  
+                 color = "blue", gravity = "SouthEast") %&gt;%  
+* image_annotate(text = "Hello", size = 50, location = "+10+20",
+*                color = "blue", gravity = "SouthEast")
+```
+]
+ 
+.right-panel-annotate-auto[
+&lt;img src="magick_files/figure-html/annotate_auto_11_output-1.png" width="507" /&gt;
+]
+
+&lt;style&gt;
+.left-panel-annotate-auto {
+  color: #777;
+  width: 38.6138613861386%;
+  height: 92%;
+  float: left;
+  font-size: 80%
+}
+.right-panel-annotate-auto {
+  width: 59.4059405940594%;
+  float: right;
+  padding-left: 1%;
+  font-size: 80%
+}
+.middle-panel-annotate-auto {
+  width: 0%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+&lt;/style&gt;
+
+
+
+
+
+---
+
+count: false
+ 
+
+.left-panel-chop-rotate[
+
+```r
+image_read(path = path) %&gt;%  
+  image_chop(geometry = "x300")  
+```
+]
+ 
+.right-panel-chop-rotate[
+&lt;img src="magick_files/figure-html/chop_rotate_1_output-1.png" width="507" /&gt;
+]
+
+---
+count: false
+ 
+
+.left-panel-chop-rotate[
+
+```r
+image_read(path = path) %&gt;%  
+* image_chop(geometry = "500x300+10+20")
+```
+]
+ 
+.right-panel-chop-rotate[
+&lt;img src="magick_files/figure-html/chop_rotate_2_output-1.png" width="284" /&gt;
+]
+
+&lt;style&gt;
+.left-panel-chop-rotate {
+  color: #777;
+  width: 38.6138613861386%;
+  height: 92%;
+  float: left;
+  font-size: 80%
+}
+.right-panel-chop-rotate {
+  width: 59.4059405940594%;
+  float: right;
+  padding-left: 1%;
+  font-size: 80%
+}
+.middle-panel-chop-rotate {
+  width: 0%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+&lt;/style&gt;
+
+
+
+
+
+
+
+---
+
+count: false
+ 
+
+.left-panel-magick2-rotate[
+
+```r
+image_read(path = path) %&gt;%  
+  image_border(color = "red") %&gt;%  
+  image_canny(geometry = "0x1+20%+10%")  
+```
+]
+ 
+.right-panel-magick2-rotate[
+&lt;img src="magick_files/figure-html/magick2_rotate_1_output-1.png" width="516" /&gt;
+]
+
+---
+count: false
+ 
+
+.left-panel-magick2-rotate[
+
+```r
+image_read(path = path) %&gt;%  
+* image_colorize(opacity = 40, color = "oldlace") %&gt;%
+  image_canny(geometry = "0x1+20%+10%")  
+```
+]
+ 
+.right-panel-magick2-rotate[
+&lt;img src="magick_files/figure-html/magick2_rotate_2_output-1.png" width="507" /&gt;
+]
+
+---
+count: false
+ 
+
+.left-panel-magick2-rotate[
+
+```r
+image_read(path = path) %&gt;%  
+* image_colorize(opacity = 30, color = "steelblue") %&gt;%
+  image_canny(geometry = "0x1+20%+10%")  
+```
+]
+ 
+.right-panel-magick2-rotate[
+&lt;img src="magick_files/figure-html/magick2_rotate_3_output-1.png" width="507" /&gt;
+]
+
+---
+count: false
+ 
+
+.left-panel-magick2-rotate[
+
+```r
+image_read(path = path) %&gt;%  
+* image_colorize(opacity = 80, color = "oldlace") %&gt;%
+  image_canny(geometry = "0x1+20%+10%")  
+```
+]
+ 
+.right-panel-magick2-rotate[
+&lt;img src="magick_files/figure-html/magick2_rotate_4_output-1.png" width="507" /&gt;
+]
+
+---
+count: false
+ 
+
+.left-panel-magick2-rotate[
+
+```r
+image_read(path = path) %&gt;%  
+* image_average() %&gt;%
+  image_canny(geometry = "0x1+20%+10%")  
+```
+]
+ 
+.right-panel-magick2-rotate[
+&lt;img src="magick_files/figure-html/magick2_rotate_5_output-1.png" width="507" /&gt;
+]
+
+---
+count: false
+ 
+
+.left-panel-magick2-rotate[
+
+```r
+image_read(path = path) %&gt;%  
+* image_background(color = "blue", flatten = TRUE) %&gt;%
+  image_canny(geometry = "0x1+20%+10%")  
+```
+]
+ 
+.right-panel-magick2-rotate[
+&lt;img src="magick_files/figure-html/magick2_rotate_6_output-1.png" width="507" /&gt;
+]
+
+---
+count: false
+ 
+
+.left-panel-magick2-rotate[
+
+```r
+image_read(path = path) %&gt;%  
+* image_channel(channel = "hue") %&gt;%
+  image_canny(geometry = "0x1+20%+10%")  
+```
+]
+ 
+.right-panel-magick2-rotate[
+&lt;img src="magick_files/figure-html/magick2_rotate_7_output-1.png" width="507" /&gt;
+]
+
+---
+count: false
+ 
+
+.left-panel-magick2-rotate[
+
+```r
+image_read(path = path) %&gt;%  
+* image_channel(channel = "cyan") %&gt;%
+  image_canny(geometry = "0x1+20%+10%")  
+```
+]
+ 
+.right-panel-magick2-rotate[
+&lt;img src="magick_files/figure-html/magick2_rotate_8_output-1.png" width="507" /&gt;
+]
+
+---
+count: false
+ 
+
+.left-panel-magick2-rotate[
+
+```r
+image_read(path = path) %&gt;%  
+* image_canny(geometry = "0x1+10%+30%") %&gt;%
+  image_canny(geometry = "0x1+20%+10%")  
+```
+]
+ 
+.right-panel-magick2-rotate[
+&lt;img src="magick_files/figure-html/magick2_rotate_9_output-1.png" width="507" /&gt;
+]
+
+&lt;style&gt;
+.left-panel-magick2-rotate {
+  color: #777;
+  width: 38.6138613861386%;
+  height: 92%;
+  float: left;
+  font-size: 80%
+}
+.right-panel-magick2-rotate {
+  width: 59.4059405940594%;
+  float: right;
+  padding-left: 1%;
+  font-size: 80%
+}
+.middle-panel-magick2-rotate {
+  width: 0%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+&lt;/style&gt;
+
+
+
+
+
+
+---
+
+
+count: false
+ 
+
+.left-panel-effects-rotate[
+
+```r
+image_read(path = path) %&gt;%  
+  image_despeckle(times = 1L)   
+```
+]
+ 
+.right-panel-effects-rotate[
+&lt;img src="magick_files/figure-html/effects_rotate_1_output-1.png" width="507" /&gt;
+]
+
+---
+count: false
+ 
+
+.left-panel-effects-rotate[
+
+```r
+image_read(path = path) %&gt;%  
+* image_reducenoise(radius = 1L)
+```
+]
+ 
+.right-panel-effects-rotate[
+&lt;img src="magick_files/figure-html/effects_rotate_2_output-1.png" width="507" /&gt;
+]
+
+---
+count: false
+ 
+
+.left-panel-effects-rotate[
+
+```r
+image_read(path = path) %&gt;%  
+* image_noise(noisetype = "gaussian")
+```
+]
+ 
+.right-panel-effects-rotate[
+&lt;img src="magick_files/figure-html/effects_rotate_3_output-1.png" width="507" /&gt;
+]
+
+---
+count: false
+ 
+
+.left-panel-effects-rotate[
+
+```r
+image_read(path = path) %&gt;%  
+* image_blur(radius = 1, sigma = 0.5)
+```
+]
+ 
+.right-panel-effects-rotate[
+&lt;img src="magick_files/figure-html/effects_rotate_4_output-1.png" width="507" /&gt;
+]
+
+---
+count: false
+ 
+
+.left-panel-effects-rotate[
+
+```r
+image_read(path = path) %&gt;%  
+* image_charcoal(radius = 1, sigma = 0.5)
+```
+]
+ 
+.right-panel-effects-rotate[
+&lt;img src="magick_files/figure-html/effects_rotate_5_output-1.png" width="507" /&gt;
+]
+
+---
+count: false
+ 
+
+.left-panel-effects-rotate[
+
+```r
+image_read(path = path) %&gt;%  
+* image_oilpaint(radius = 1)
+```
+]
+ 
+.right-panel-effects-rotate[
+&lt;img src="magick_files/figure-html/effects_rotate_6_output-1.png" width="507" /&gt;
+]
+
+---
+count: false
+ 
+
+.left-panel-effects-rotate[
+
+```r
+image_read(path = path) %&gt;%  
+* image_emboss(radius = 1, sigma = 0.5)
+```
+]
+ 
+.right-panel-effects-rotate[
+&lt;img src="magick_files/figure-html/effects_rotate_7_output-1.png" width="507" /&gt;
+]
+
+---
+count: false
+ 
+
+.left-panel-effects-rotate[
+
+```r
+image_read(path = path) %&gt;%  
+* image_implode(factor = 0.5)
+```
+]
+ 
+.right-panel-effects-rotate[
+&lt;img src="magick_files/figure-html/effects_rotate_8_output-1.png" width="507" /&gt;
+]
+
+---
+count: false
+ 
+
+.left-panel-effects-rotate[
+
+```r
+image_read(path = path) %&gt;%  
+* image_negate()
+```
+]
+ 
+.right-panel-effects-rotate[
+&lt;img src="magick_files/figure-html/effects_rotate_9_output-1.png" width="507" /&gt;
+]
+
+&lt;style&gt;
+.left-panel-effects-rotate {
+  color: #777;
+  width: 38.6138613861386%;
+  height: 92%;
+  float: left;
+  font-size: 80%
+}
+.right-panel-effects-rotate {
+  width: 59.4059405940594%;
+  float: right;
+  padding-left: 1%;
+  font-size: 80%
+}
+.middle-panel-effects-rotate {
+  width: 0%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+&lt;/style&gt;
+
+
+
+
+
+---
+
+count: false
+ 
+
+.left-panel-ggplot-auto[
+
+```r
+*library(ggplot2)
+```
+]
+ 
+.right-panel-ggplot-auto[
+
+]
+
+---
+count: false
+ 
+
+.left-panel-ggplot-auto[
+
+```r
+library(ggplot2)  
+*ggplot(data = cars)
+```
+]
+ 
+.right-panel-ggplot-auto[
+&lt;img src="magick_files/figure-html/ggplot_auto_2_output-1.png" width="432" /&gt;
+]
+
+---
+count: false
+ 
+
+.left-panel-ggplot-auto[
+
+```r
+library(ggplot2)  
+ggplot(data = cars) +  
+* aes(x = speed, y = dist)
+```
+]
+ 
+.right-panel-ggplot-auto[
+&lt;img src="magick_files/figure-html/ggplot_auto_3_output-1.png" width="432" /&gt;
+]
+
+---
+count: false
+ 
+
+.left-panel-ggplot-auto[
+
+```r
+library(ggplot2)  
+ggplot(data = cars) +  
+  aes(x = speed, y = dist) +  
+* geom_point(size = 5)
+```
+]
+ 
+.right-panel-ggplot-auto[
+&lt;img src="magick_files/figure-html/ggplot_auto_4_output-1.png" width="432" /&gt;
+]
+
+---
+count: false
+ 
+
+.left-panel-ggplot-auto[
+
+```r
+library(ggplot2)  
+ggplot(data = cars) +  
+  aes(x = speed, y = dist) +  
+  geom_point(size = 5) -&gt;  
+*g 
+```
+]
+ 
+.right-panel-ggplot-auto[
+
+]
+
+---
+count: false
+ 
+
+.left-panel-ggplot-auto[
+
+```r
+library(ggplot2)  
+ggplot(data = cars) +  
+  aes(x = speed, y = dist) +  
+  geom_point(size = 5) -&gt;  
+g  
+
+*ggsave(filename = "my_plot.png", plot = g,
+*      width = 8, height = 6)
+```
+]
+ 
+.right-panel-ggplot-auto[
+
+]
+
+---
+count: false
+ 
+
+.left-panel-ggplot-auto[
+
+```r
+library(ggplot2)  
+ggplot(data = cars) +  
+  aes(x = speed, y = dist) +  
+  geom_point(size = 5) -&gt;  
+g  
+
+ggsave(filename = "my_plot.png", plot = g,  
+       width = 8, height = 6)  
+
+*"my_plot.png"
+```
+]
+ 
+.right-panel-ggplot-auto[
+
+```
+[1] "my_plot.png"
+```
+]
+
+---
+count: false
+ 
+
+.left-panel-ggplot-auto[
+
+```r
+library(ggplot2)  
+ggplot(data = cars) +  
+  aes(x = speed, y = dist) +  
+  geom_point(size = 5) -&gt;  
+g  
+
+ggsave(filename = "my_plot.png", plot = g,  
+       width = 8, height = 6)  
+
+"my_plot.png" %&gt;%  
+* image_read(path = .)
+```
+]
+ 
+.right-panel-ggplot-auto[
+&lt;img src="magick_files/figure-html/ggplot_auto_8_output-1.png" width="1067" /&gt;
+]
+
+---
+count: false
+ 
+
+.left-panel-ggplot-auto[
+
+```r
+library(ggplot2)  
+ggplot(data = cars) +  
+  aes(x = speed, y = dist) +  
+  geom_point(size = 5) -&gt;  
+g  
+
+ggsave(filename = "my_plot.png", plot = g,  
+       width = 8, height = 6)  
+
+"my_plot.png" %&gt;%  
+  image_read(path = .) %&gt;%  
+* image_annotate(text = "hello\nthere", size = 100,
+*                location = "+20+50")
+```
+]
+ 
+.right-panel-ggplot-auto[
+&lt;img src="magick_files/figure-html/ggplot_auto_9_output-1.png" width="1067" /&gt;
+]
+
+---
+count: false
+ 
+
+.left-panel-ggplot-auto[
+
+```r
+library(ggplot2)  
+ggplot(data = cars) +  
+  aes(x = speed, y = dist) +  
+  geom_point(size = 5) -&gt;  
+g  
+
+ggsave(filename = "my_plot.png", plot = g,  
+       width = 8, height = 6)  
+
+"my_plot.png" %&gt;%  
+  image_read(path = .) %&gt;%  
+  image_annotate(text = "hello\nthere", size = 100,  
+                 location = "+20+50") %&gt;%  
+* image_emboss()
+```
+]
+ 
+.right-panel-ggplot-auto[
+&lt;img src="magick_files/figure-html/ggplot_auto_10_output-1.png" width="1067" /&gt;
+]
+
+---
+count: false
+ 
+
+.left-panel-ggplot-auto[
+
+```r
+library(ggplot2)  
+ggplot(data = cars) +  
+  aes(x = speed, y = dist) +  
+  geom_point(size = 5) -&gt;  
+g  
+
+ggsave(filename = "my_plot.png", plot = g,  
+       width = 8, height = 6)  
+
+"my_plot.png" %&gt;%  
+  image_read(path = .) %&gt;%  
+  image_annotate(text = "hello\nthere", size = 100,  
+                 location = "+20+50") %&gt;%  
+  image_emboss() %&gt;%  
+* image_negate()
+```
+]
+ 
+.right-panel-ggplot-auto[
+&lt;img src="magick_files/figure-html/ggplot_auto_11_output-1.png" width="1067" /&gt;
+]
+
+&lt;style&gt;
+.left-panel-ggplot-auto {
+  color: #777;
+  width: 38.6138613861386%;
+  height: 92%;
+  float: left;
+  font-size: 80%
+}
+.right-panel-ggplot-auto {
+  width: 59.4059405940594%;
+  float: right;
+  padding-left: 1%;
+  font-size: 80%
+}
+.middle-panel-ggplot-auto {
+  width: 0%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+&lt;/style&gt;
+
+
+
+
+
+
+
+
+
+&lt;style type="text/css"&gt;
+.remark-code{line-height: 1.5; font-size: 80%}
+
+@media print {
+  .has-continuation {
+    display: block;
+  }
+}
+&lt;/style&gt;
+    </textarea>
+<style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
+<script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
+<script>var slideshow = remark.create({
+"ratio": "20:10",
+"highlightStyle": "github",
+"highlightLines": true,
+"countIncrementalSlides": false
+});
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
+  window.dispatchEvent(new Event('resize'));
+});
+(function(d) {
+  var s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+  if (!r) return;
+  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
+  d.head.appendChild(s);
+})(document);
+
+(function(d) {
+  var el = d.getElementsByClassName("remark-slides-area");
+  if (!el) return;
+  var slide, slides = slideshow.getSlides(), els = el[0].children;
+  for (var i = 1; i < slides.length; i++) {
+    slide = slides[i];
+    if (slide.properties.continued === "true" || slide.properties.count === "false") {
+      els[i - 1].className += ' has-continuation';
+    }
+  }
+  var s = d.createElement("style");
+  s.type = "text/css"; s.innerHTML = "@media print { .has-continuation { display: none; } }";
+  d.head.appendChild(s);
+})(document);
+// delete the temporary CSS (for displaying all slides initially) when the user
+// starts to view slides
+(function() {
+  var deleted = false;
+  slideshow.on('beforeShowSlide', function(slide) {
+    if (deleted) return;
+    var sheets = document.styleSheets, node;
+    for (var i = 0; i < sheets.length; i++) {
+      node = sheets[i].ownerNode;
+      if (node.dataset["target"] !== "print-only") continue;
+      node.parentNode.removeChild(node);
+    }
+    deleted = true;
+  });
+})();
+(function() {
+  "use strict"
+  // Replace <script> tags in slides area to make them executable
+  var scripts = document.querySelectorAll(
+    '.remark-slides-area .remark-slide-container script'
+  );
+  if (!scripts.length) return;
+  for (var i = 0; i < scripts.length; i++) {
+    var s = document.createElement('script');
+    var code = document.createTextNode(scripts[i].textContent);
+    s.appendChild(code);
+    var scriptAttrs = scripts[i].attributes;
+    for (var j = 0; j < scriptAttrs.length; j++) {
+      s.setAttribute(scriptAttrs[j].name, scriptAttrs[j].value);
+    }
+    scripts[i].parentElement.replaceChild(s, scripts[i]);
+  }
+})();
+(function() {
+  var links = document.getElementsByTagName('a');
+  for (var i = 0; i < links.length; i++) {
+    if (/^(https?:)?\/\//.test(links[i].getAttribute('href'))) {
+      links[i].target = '_blank';
+    }
+  }
+})();
+// adds .remark-code-has-line-highlighted class to <pre> parent elements
+// of code chunks containing highlighted lines with class .remark-code-line-highlighted
+(function(d) {
+  const hlines = d.querySelectorAll('.remark-code-line-highlighted');
+  const preParents = [];
+  const findPreParent = function(line, p = 0) {
+    if (p > 1) return null; // traverse up no further than grandparent
+    const el = line.parentElement;
+    return el.tagName === "PRE" ? el : findPreParent(el, ++p);
+  };
+
+  for (let line of hlines) {
+    let pre = findPreParent(line);
+    if (pre && !preParents.includes(pre)) preParents.push(pre);
+  }
+  preParents.forEach(p => p.classList.add("remark-code-has-line-highlighted"));
+})(document);</script>
+
+<script>
+slideshow._releaseMath = function(el) {
+  var i, text, code, codes = el.getElementsByTagName('code');
+  for (i = 0; i < codes.length;) {
+    code = codes[i];
+    if (code.parentNode.tagName !== 'PRE' && code.childElementCount === 0) {
+      text = code.textContent;
+      if (/^\\\((.|\s)+\\\)$/.test(text) || /^\\\[(.|\s)+\\\]$/.test(text) ||
+          /^\$\$(.|\s)+\$\$$/.test(text) ||
+          /^\\begin\{([^}]+)\}(.|\s)+\\end\{[^}]+\}$/.test(text)) {
+        code.outerHTML = code.innerHTML;  // remove <code></code>
+        continue;
+      }
+    }
+    i++;
+  }
+};
+slideshow._releaseMath(document);
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>
