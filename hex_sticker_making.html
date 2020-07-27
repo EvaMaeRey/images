@@ -1,0 +1,1740 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+  <head>
+    <title>An animated hex sticker for flipbookr</title>
+    <meta charset="utf-8" />
+    <meta name="author" content="Gina Reynolds, July 2020" />
+    <link rel="stylesheet" href="xaringan-themer.css" type="text/css" />
+  </head>
+  <body>
+    <textarea id="source">
+class: center, middle, inverse, title-slide
+
+# An animated hex sticker for flipbookr
+## Built with {ggplot}, {magick},<br>{flipbookr} and {xaringan}
+### Gina Reynolds, July 2020
+
+---
+
+
+
+
+
+
+---
+
+# Welcome!
+
+This is a 'the-making-of' type flipbook.  We'll see how the *animated* {flipbookr}  hex sticker is made with {ggplot2} and [{magick}](https://cran.r-project.org/web/packages/magick/vignettes/intro.html), a great image manipulation package.  
+
+--
+
+As I'm writing this welcome, the animated hex sticker isn't fully put together -- the animation bit is yet to come, but I'm confident we can get it done (maybe with a for loop - that's the quick way for me - you might find it ugly).  
+
+--
+
+The idea is to put a series of images inside the hex, and present as a gif.
+
+
+---
+
+# Warm up: using {magick} to prepare background image for these slides
+
+--
+
+For this flipbook, I wanted to try to use the cover image throughout the entire slide deck, but a washed out version.  Lore Abad and collaborators do this in their [spatial networks slides](https://sfnetworks.github.io/sfnetworks-webinar/slides#1) and they look fantastic.  They use [xaringanthemer]() to do so. 
+
+--
+
+Having a image background is actually helpful to demonstrate what's transparent in images and what's not.  
+
+--
+
+Let's look at the preparation of this background image which will give you a feel for how to get things done with {magick}.  
+
+
+
+---
+
+count: false
+ 
+
+.panel1-prepare_background-auto[
+
+```r
+# Shilo Labelle is the photographer in BC Canada
+*honey_comb &lt;- "https://images.unsplash.com/photo-1566236057428-7e68793aef51?ixlib=rb-1.2.1&amp;ixid=eyJhcHBfaWQiOjEyMDd9&amp;auto=format&amp;fit=crop&amp;w=1567&amp;q=80"
+```
+]
+ 
+.panel2-prepare_background-auto[
+
+]
+
+---
+count: false
+ 
+
+.panel1-prepare_background-auto[
+
+```r
+# Shilo Labelle is the photographer in BC Canada
+honey_comb &lt;- "https://images.unsplash.com/photo-1566236057428-7e68793aef51?ixlib=rb-1.2.1&amp;ixid=eyJhcHBfaWQiOjEyMDd9&amp;auto=format&amp;fit=crop&amp;w=1567&amp;q=80"  
+
+*magick::image_read(honey_comb)
+```
+]
+ 
+.panel2-prepare_background-auto[
+&lt;img src="hex_sticker_making_files/figure-html/prepare_background_auto_2_output-1.png" width="696" /&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-prepare_background-auto[
+
+```r
+# Shilo Labelle is the photographer in BC Canada
+honey_comb &lt;- "https://images.unsplash.com/photo-1566236057428-7e68793aef51?ixlib=rb-1.2.1&amp;ixid=eyJhcHBfaWQiOjEyMDd9&amp;auto=format&amp;fit=crop&amp;w=1567&amp;q=80"  
+
+magick::image_read(honey_comb) %&gt;%  
+* magick::image_colorize(opacity = 90,
+*                        color = "snow1")
+```
+]
+ 
+.panel2-prepare_background-auto[
+&lt;img src="hex_sticker_making_files/figure-html/prepare_background_auto_3_output-1.png" width="696" /&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-prepare_background-auto[
+
+```r
+# Shilo Labelle is the photographer in BC Canada
+honey_comb &lt;- "https://images.unsplash.com/photo-1566236057428-7e68793aef51?ixlib=rb-1.2.1&amp;ixid=eyJhcHBfaWQiOjEyMDd9&amp;auto=format&amp;fit=crop&amp;w=1567&amp;q=80"  
+
+magick::image_read(honey_comb) %&gt;%  
+  magick::image_colorize(opacity = 90,  
+                         color = "snow1") %&gt;%  
+* magick::image_write(path = "background.png")
+```
+]
+ 
+.panel2-prepare_background-auto[
+
+]
+
+&lt;style&gt;
+.panel1-prepare_background-auto {
+  color: black;
+  width: 38.6060606060606%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+.panel2-prepare_background-auto {
+  color: black;
+  width: 59.3939393939394%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+.panel3-prepare_background-auto {
+  color: black;
+  width: NA%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+&lt;/style&gt;
+
+
+
+
+
+---
+
+
+
+
+
+---
+class: center, middle
+
+# Building a hex canvas with ggplot2
+
+---
+
+count: false
+ 
+
+.panel1-build_hex-auto[
+
+```r
+*tibble(x = c(-sqrt(3)/2, -sqrt(3)/2, 0,
+*            sqrt(3)/2, sqrt(3)/2, 0),
+*      y = c(0.5, -0.5, -1, -0.5, 0.5, 1))
+```
+]
+ 
+.panel2-build_hex-auto[
+
+```
+# A tibble: 6 x 2
+       x     y
+   &lt;dbl&gt; &lt;dbl&gt;
+1 -0.866   0.5
+2 -0.866  -0.5
+3  0      -1  
+4  0.866  -0.5
+5  0.866   0.5
+6  0       1  
+```
+]
+
+---
+count: false
+ 
+
+.panel1-build_hex-auto[
+
+```r
+tibble(x = c(-sqrt(3)/2, -sqrt(3)/2, 0,  
+             sqrt(3)/2, sqrt(3)/2, 0),  
+       y = c(0.5, -0.5, -1, -0.5, 0.5, 1)) -&gt;  
+*hex_vertices
+```
+]
+ 
+.panel2-build_hex-auto[
+
+]
+
+---
+count: false
+ 
+
+.panel1-build_hex-auto[
+
+```r
+tibble(x = c(-sqrt(3)/2, -sqrt(3)/2, 0,  
+             sqrt(3)/2, sqrt(3)/2, 0),  
+       y = c(0.5, -0.5, -1, -0.5, 0.5, 1)) -&gt;  
+hex_vertices  
+
+*hex_vertices
+```
+]
+ 
+.panel2-build_hex-auto[
+
+```
+# A tibble: 6 x 2
+       x     y
+   &lt;dbl&gt; &lt;dbl&gt;
+1 -0.866   0.5
+2 -0.866  -0.5
+3  0      -1  
+4  0.866  -0.5
+5  0.866   0.5
+6  0       1  
+```
+]
+
+---
+count: false
+ 
+
+.panel1-build_hex-auto[
+
+```r
+tibble(x = c(-sqrt(3)/2, -sqrt(3)/2, 0,  
+             sqrt(3)/2, sqrt(3)/2, 0),  
+       y = c(0.5, -0.5, -1, -0.5, 0.5, 1)) -&gt;  
+hex_vertices  
+
+hex_vertices %&gt;%  
+# closing it up for the polygon
+* slice(1)
+```
+]
+ 
+.panel2-build_hex-auto[
+
+```
+# A tibble: 1 x 2
+       x     y
+   &lt;dbl&gt; &lt;dbl&gt;
+1 -0.866   0.5
+```
+]
+
+---
+count: false
+ 
+
+.panel1-build_hex-auto[
+
+```r
+tibble(x = c(-sqrt(3)/2, -sqrt(3)/2, 0,  
+             sqrt(3)/2, sqrt(3)/2, 0),  
+       y = c(0.5, -0.5, -1, -0.5, 0.5, 1)) -&gt;  
+hex_vertices  
+
+hex_vertices %&gt;%  
+# closing it up for the polygon
+  slice(1) %&gt;%  
+* bind_rows(hex_vertices,
+*           .)
+```
+]
+ 
+.panel2-build_hex-auto[
+
+```
+# A tibble: 7 x 2
+       x     y
+   &lt;dbl&gt; &lt;dbl&gt;
+1 -0.866   0.5
+2 -0.866  -0.5
+3  0      -1  
+4  0.866  -0.5
+5  0.866   0.5
+6  0       1  
+7 -0.866   0.5
+```
+]
+
+---
+count: false
+ 
+
+.panel1-build_hex-auto[
+
+```r
+tibble(x = c(-sqrt(3)/2, -sqrt(3)/2, 0,  
+             sqrt(3)/2, sqrt(3)/2, 0),  
+       y = c(0.5, -0.5, -1, -0.5, 0.5, 1)) -&gt;  
+hex_vertices  
+
+hex_vertices %&gt;%  
+# closing it up for the polygon
+  slice(1) %&gt;%  
+  bind_rows(hex_vertices,  
+            .) %&gt;%  
+* ggplot()
+```
+]
+ 
+.panel2-build_hex-auto[
+&lt;img src="hex_sticker_making_files/figure-html/build_hex_auto_6_output-1.png" width="432" /&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-build_hex-auto[
+
+```r
+tibble(x = c(-sqrt(3)/2, -sqrt(3)/2, 0,  
+             sqrt(3)/2, sqrt(3)/2, 0),  
+       y = c(0.5, -0.5, -1, -0.5, 0.5, 1)) -&gt;  
+hex_vertices  
+
+hex_vertices %&gt;%  
+# closing it up for the polygon
+  slice(1) %&gt;%  
+  bind_rows(hex_vertices,  
+            .) %&gt;%  
+  ggplot() +  
+* aes(x = x)
+```
+]
+ 
+.panel2-build_hex-auto[
+&lt;img src="hex_sticker_making_files/figure-html/build_hex_auto_7_output-1.png" width="432" /&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-build_hex-auto[
+
+```r
+tibble(x = c(-sqrt(3)/2, -sqrt(3)/2, 0,  
+             sqrt(3)/2, sqrt(3)/2, 0),  
+       y = c(0.5, -0.5, -1, -0.5, 0.5, 1)) -&gt;  
+hex_vertices  
+
+hex_vertices %&gt;%  
+# closing it up for the polygon
+  slice(1) %&gt;%  
+  bind_rows(hex_vertices,  
+            .) %&gt;%  
+  ggplot() +  
+  aes(x = x) +  
+* aes(y = y)
+```
+]
+ 
+.panel2-build_hex-auto[
+&lt;img src="hex_sticker_making_files/figure-html/build_hex_auto_8_output-1.png" width="432" /&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-build_hex-auto[
+
+```r
+tibble(x = c(-sqrt(3)/2, -sqrt(3)/2, 0,  
+             sqrt(3)/2, sqrt(3)/2, 0),  
+       y = c(0.5, -0.5, -1, -0.5, 0.5, 1)) -&gt;  
+hex_vertices  
+
+hex_vertices %&gt;%  
+# closing it up for the polygon
+  slice(1) %&gt;%  
+  bind_rows(hex_vertices,  
+            .) %&gt;%  
+  ggplot() +  
+  aes(x = x) +  
+  aes(y = y) +  
+* geom_polygon(color = "steelblue4",
+*              size = 3,
+*              fill = "aliceblue")
+```
+]
+ 
+.panel2-build_hex-auto[
+&lt;img src="hex_sticker_making_files/figure-html/build_hex_auto_9_output-1.png" width="432" /&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-build_hex-auto[
+
+```r
+tibble(x = c(-sqrt(3)/2, -sqrt(3)/2, 0,  
+             sqrt(3)/2, sqrt(3)/2, 0),  
+       y = c(0.5, -0.5, -1, -0.5, 0.5, 1)) -&gt;  
+hex_vertices  
+
+hex_vertices %&gt;%  
+# closing it up for the polygon
+  slice(1) %&gt;%  
+  bind_rows(hex_vertices,  
+            .) %&gt;%  
+  ggplot() +  
+  aes(x = x) +  
+  aes(y = y) +  
+  geom_polygon(color = "steelblue4",  
+               size = 3,  
+               fill = "aliceblue") +  
+* coord_equal()
+```
+]
+ 
+.panel2-build_hex-auto[
+&lt;img src="hex_sticker_making_files/figure-html/build_hex_auto_10_output-1.png" width="432" /&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-build_hex-auto[
+
+```r
+tibble(x = c(-sqrt(3)/2, -sqrt(3)/2, 0,  
+             sqrt(3)/2, sqrt(3)/2, 0),  
+       y = c(0.5, -0.5, -1, -0.5, 0.5, 1)) -&gt;  
+hex_vertices  
+
+hex_vertices %&gt;%  
+# closing it up for the polygon
+  slice(1) %&gt;%  
+  bind_rows(hex_vertices,  
+            .) %&gt;%  
+  ggplot() +  
+  aes(x = x) +  
+  aes(y = y) +  
+  geom_polygon(color = "steelblue4",  
+               size = 3,  
+               fill = "aliceblue") +  
+  coord_equal() +  
+* theme_void()
+```
+]
+ 
+.panel2-build_hex-auto[
+&lt;img src="hex_sticker_making_files/figure-html/build_hex_auto_11_output-1.png" width="432" /&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-build_hex-auto[
+
+```r
+tibble(x = c(-sqrt(3)/2, -sqrt(3)/2, 0,  
+             sqrt(3)/2, sqrt(3)/2, 0),  
+       y = c(0.5, -0.5, -1, -0.5, 0.5, 1)) -&gt;  
+hex_vertices  
+
+hex_vertices %&gt;%  
+# closing it up for the polygon
+  slice(1) %&gt;%  
+  bind_rows(hex_vertices,  
+            .) %&gt;%  
+  ggplot() +  
+  aes(x = x) +  
+  aes(y = y) +  
+  geom_polygon(color = "steelblue4",  
+               size = 3,  
+               fill = "aliceblue") +  
+  coord_equal() +  
+  theme_void() -&gt;  
+*g 
+```
+]
+ 
+.panel2-build_hex-auto[
+
+]
+
+---
+count: false
+ 
+
+.panel1-build_hex-auto[
+
+```r
+tibble(x = c(-sqrt(3)/2, -sqrt(3)/2, 0,  
+             sqrt(3)/2, sqrt(3)/2, 0),  
+       y = c(0.5, -0.5, -1, -0.5, 0.5, 1)) -&gt;  
+hex_vertices  
+
+hex_vertices %&gt;%  
+# closing it up for the polygon
+  slice(1) %&gt;%  
+  bind_rows(hex_vertices,  
+            .) %&gt;%  
+  ggplot() +  
+  aes(x = x) +  
+  aes(y = y) +  
+  geom_polygon(color = "steelblue4",  
+               size = 3,  
+               fill = "aliceblue") +  
+  coord_equal() +  
+  theme_void() -&gt;  
+g  
+
+*ggsave(
+* filename = "hex_background.png",
+* plot = g,
+* bg = "transparent"  # don't forget this guy
+* )
+```
+]
+ 
+.panel2-build_hex-auto[
+
+]
+
+&lt;style&gt;
+.panel1-build_hex-auto {
+  color: black;
+  width: 38.6060606060606%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+.panel2-build_hex-auto {
+  color: black;
+  width: 59.3939393939394%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+.panel3-build_hex-auto {
+  color: black;
+  width: NA%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+&lt;/style&gt;
+
+
+
+
+
+
+
+
+---
+class: center, middle
+
+# Building a hex *frame* only with ggplot2
+
+--
+
+I'm not sure that I will use this, but maybe.
+
+---
+
+
+count: false
+ 
+
+.panel1-build_hex_frame-auto[
+
+```r
+*hex_vertices
+```
+]
+ 
+.panel2-build_hex_frame-auto[
+
+```
+# A tibble: 6 x 2
+       x     y
+   &lt;dbl&gt; &lt;dbl&gt;
+1 -0.866   0.5
+2 -0.866  -0.5
+3  0      -1  
+4  0.866  -0.5
+5  0.866   0.5
+6  0       1  
+```
+]
+
+---
+count: false
+ 
+
+.panel1-build_hex_frame-auto[
+
+```r
+hex_vertices %&gt;%  
+# closing it up for the polygon
+* slice(1)
+```
+]
+ 
+.panel2-build_hex_frame-auto[
+
+```
+# A tibble: 1 x 2
+       x     y
+   &lt;dbl&gt; &lt;dbl&gt;
+1 -0.866   0.5
+```
+]
+
+---
+count: false
+ 
+
+.panel1-build_hex_frame-auto[
+
+```r
+hex_vertices %&gt;%  
+# closing it up for the polygon
+  slice(1) %&gt;%  
+* bind_rows(hex_vertices,
+*           .)
+```
+]
+ 
+.panel2-build_hex_frame-auto[
+
+```
+# A tibble: 7 x 2
+       x     y
+   &lt;dbl&gt; &lt;dbl&gt;
+1 -0.866   0.5
+2 -0.866  -0.5
+3  0      -1  
+4  0.866  -0.5
+5  0.866   0.5
+6  0       1  
+7 -0.866   0.5
+```
+]
+
+---
+count: false
+ 
+
+.panel1-build_hex_frame-auto[
+
+```r
+hex_vertices %&gt;%  
+# closing it up for the polygon
+  slice(1) %&gt;%  
+  bind_rows(hex_vertices,  
+            .) %&gt;%  
+* ggplot()
+```
+]
+ 
+.panel2-build_hex_frame-auto[
+&lt;img src="hex_sticker_making_files/figure-html/build_hex_frame_auto_4_output-1.png" width="432" /&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-build_hex_frame-auto[
+
+```r
+hex_vertices %&gt;%  
+# closing it up for the polygon
+  slice(1) %&gt;%  
+  bind_rows(hex_vertices,  
+            .) %&gt;%  
+  ggplot() +  
+* aes(x = x)
+```
+]
+ 
+.panel2-build_hex_frame-auto[
+&lt;img src="hex_sticker_making_files/figure-html/build_hex_frame_auto_5_output-1.png" width="432" /&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-build_hex_frame-auto[
+
+```r
+hex_vertices %&gt;%  
+# closing it up for the polygon
+  slice(1) %&gt;%  
+  bind_rows(hex_vertices,  
+            .) %&gt;%  
+  ggplot() +  
+  aes(x = x) +  
+* aes(y = y)
+```
+]
+ 
+.panel2-build_hex_frame-auto[
+&lt;img src="hex_sticker_making_files/figure-html/build_hex_frame_auto_6_output-1.png" width="432" /&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-build_hex_frame-auto[
+
+```r
+hex_vertices %&gt;%  
+# closing it up for the polygon
+  slice(1) %&gt;%  
+  bind_rows(hex_vertices,  
+            .) %&gt;%  
+  ggplot() +  
+  aes(x = x) +  
+  aes(y = y) +  
+* geom_polygon(
+*   color = "magenta",
+*   size = 3,
+# for a frame only
+*   fill = "transparent"
+*   )
+```
+]
+ 
+.panel2-build_hex_frame-auto[
+&lt;img src="hex_sticker_making_files/figure-html/build_hex_frame_auto_7_output-1.png" width="432" /&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-build_hex_frame-auto[
+
+```r
+hex_vertices %&gt;%  
+# closing it up for the polygon
+  slice(1) %&gt;%  
+  bind_rows(hex_vertices,  
+            .) %&gt;%  
+  ggplot() +  
+  aes(x = x) +  
+  aes(y = y) +  
+  geom_polygon(  
+    color = "magenta",  
+    size = 3,  
+# for a frame only
+    fill = "transparent"  
+    ) +  
+* coord_equal()
+```
+]
+ 
+.panel2-build_hex_frame-auto[
+&lt;img src="hex_sticker_making_files/figure-html/build_hex_frame_auto_8_output-1.png" width="432" /&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-build_hex_frame-auto[
+
+```r
+hex_vertices %&gt;%  
+# closing it up for the polygon
+  slice(1) %&gt;%  
+  bind_rows(hex_vertices,  
+            .) %&gt;%  
+  ggplot() +  
+  aes(x = x) +  
+  aes(y = y) +  
+  geom_polygon(  
+    color = "magenta",  
+    size = 3,  
+# for a frame only
+    fill = "transparent"  
+    ) +  
+  coord_equal() +  
+* theme_void()
+```
+]
+ 
+.panel2-build_hex_frame-auto[
+&lt;img src="hex_sticker_making_files/figure-html/build_hex_frame_auto_9_output-1.png" width="432" /&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-build_hex_frame-auto[
+
+```r
+hex_vertices %&gt;%  
+# closing it up for the polygon
+  slice(1) %&gt;%  
+  bind_rows(hex_vertices,  
+            .) %&gt;%  
+  ggplot() +  
+  aes(x = x) +  
+  aes(y = y) +  
+  geom_polygon(  
+    color = "magenta",  
+    size = 3,  
+# for a frame only
+    fill = "transparent"  
+    ) +  
+  coord_equal() +  
+  theme_void() -&gt;  
+*g 
+```
+]
+ 
+.panel2-build_hex_frame-auto[
+
+]
+
+---
+count: false
+ 
+
+.panel1-build_hex_frame-auto[
+
+```r
+hex_vertices %&gt;%  
+# closing it up for the polygon
+  slice(1) %&gt;%  
+  bind_rows(hex_vertices,  
+            .) %&gt;%  
+  ggplot() +  
+  aes(x = x) +  
+  aes(y = y) +  
+  geom_polygon(  
+    color = "magenta",  
+    size = 3,  
+# for a frame only
+    fill = "transparent"  
+    ) +  
+  coord_equal() +  
+  theme_void() -&gt;  
+g  
+
+*ggsave(
+* filename = "hex_frame.png",
+* plot = g,
+* bg = "transparent"  # don't forget this guy
+* )
+```
+]
+ 
+.panel2-build_hex_frame-auto[
+
+]
+
+&lt;style&gt;
+.panel1-build_hex_frame-auto {
+  color: black;
+  width: 38.6060606060606%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+.panel2-build_hex_frame-auto {
+  color: black;
+  width: 59.3939393939394%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+.panel3-build_hex_frame-auto {
+  color: black;
+  width: NA%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+&lt;/style&gt;
+
+
+
+
+
+
+
+
+---
+
+# Build the contents of the hex sticker
+
+We'll put a ggplot build created with flipbookr inside the hex sticker. 
+
+---
+
+count: false
+ 
+
+.panel1-cars_flipbook-auto[
+
+```r
+*cars
+```
+]
+ 
+.panel2-cars_flipbook-auto[
+
+```
+   speed dist
+1      4    2
+2      4   10
+3      7    4
+4      7   22
+5      8   16
+6      9   10
+7     10   18
+8     10   26
+9     10   34
+10    11   17
+11    11   28
+12    12   14
+13    12   20
+14    12   24
+15    12   28
+16    13   26
+17    13   34
+18    13   34
+19    13   46
+20    14   26
+21    14   36
+22    14   60
+23    14   80
+24    15   20
+25    15   26
+26    15   54
+27    16   32
+28    16   40
+29    17   32
+30    17   40
+31    17   50
+32    18   42
+33    18   56
+34    18   76
+35    18   84
+36    19   36
+37    19   46
+38    19   68
+39    20   32
+40    20   48
+41    20   52
+42    20   56
+43    20   64
+44    22   66
+45    23   54
+46    24   70
+47    24   92
+48    24   93
+49    24  120
+50    25   85
+```
+]
+
+---
+count: false
+ 
+
+.panel1-cars_flipbook-auto[
+
+```r
+cars %&gt;%  
+* ggplot()
+```
+]
+ 
+.panel2-cars_flipbook-auto[
+&lt;img src="hex_sticker_making_files/figure-html/cars_flipbook_auto_2_output-1.png" width="432" /&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-cars_flipbook-auto[
+
+```r
+cars %&gt;%  
+  ggplot() +  
+* ggthemes::theme_solarized(base_size = 15)
+```
+]
+ 
+.panel2-cars_flipbook-auto[
+&lt;img src="hex_sticker_making_files/figure-html/cars_flipbook_auto_3_output-1.png" width="432" /&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-cars_flipbook-auto[
+
+```r
+cars %&gt;%  
+  ggplot() +  
+  ggthemes::theme_solarized(base_size = 15) +  
+* aes(x = speed)
+```
+]
+ 
+.panel2-cars_flipbook-auto[
+&lt;img src="hex_sticker_making_files/figure-html/cars_flipbook_auto_4_output-1.png" width="432" /&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-cars_flipbook-auto[
+
+```r
+cars %&gt;%  
+  ggplot() +  
+  ggthemes::theme_solarized(base_size = 15) +  
+  aes(x = speed) +  
+* aes(y = dist)
+```
+]
+ 
+.panel2-cars_flipbook-auto[
+&lt;img src="hex_sticker_making_files/figure-html/cars_flipbook_auto_5_output-1.png" width="432" /&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-cars_flipbook-auto[
+
+```r
+cars %&gt;%  
+  ggplot() +  
+  ggthemes::theme_solarized(base_size = 15) +  
+  aes(x = speed) +  
+  aes(y = dist) +  
+* geom_point(size = 6,
+*            fill = "plum4",
+*            shape = 21,
+*            alpha = .75)
+```
+]
+ 
+.panel2-cars_flipbook-auto[
+&lt;img src="hex_sticker_making_files/figure-html/cars_flipbook_auto_6_output-1.png" width="432" /&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-cars_flipbook-auto[
+
+```r
+cars %&gt;%  
+  ggplot() +  
+  ggthemes::theme_solarized(base_size = 15) +  
+  aes(x = speed) +  
+  aes(y = dist) +  
+  geom_point(size = 6,  
+             fill = "plum4",  
+             shape = 21,  
+             alpha = .75) +  
+* labs(title = "The 'cars' dataset")
+```
+]
+ 
+.panel2-cars_flipbook-auto[
+&lt;img src="hex_sticker_making_files/figure-html/cars_flipbook_auto_7_output-1.png" width="432" /&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-cars_flipbook-auto[
+
+```r
+cars %&gt;%  
+  ggplot() +  
+  ggthemes::theme_solarized(base_size = 15) +  
+  aes(x = speed) +  
+  aes(y = dist) +  
+  geom_point(size = 6,  
+             fill = "plum4",  
+             shape = 21,  
+             alpha = .75) +  
+  labs(title = "The 'cars' dataset") +  
+* labs(subtitle = "Speed and Stopping distance are correlated")
+```
+]
+ 
+.panel2-cars_flipbook-auto[
+&lt;img src="hex_sticker_making_files/figure-html/cars_flipbook_auto_8_output-1.png" width="432" /&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-cars_flipbook-auto[
+
+```r
+cars %&gt;%  
+  ggplot() +  
+  ggthemes::theme_solarized(base_size = 15) +  
+  aes(x = speed) +  
+  aes(y = dist) +  
+  geom_point(size = 6,  
+             fill = "plum4",  
+             shape = 21,  
+             alpha = .75) +  
+  labs(title = "The 'cars' dataset") +  
+  labs(subtitle = "Speed and Stopping distance are correlated") +  
+* labs(x = "Speed (mph)")
+```
+]
+ 
+.panel2-cars_flipbook-auto[
+&lt;img src="hex_sticker_making_files/figure-html/cars_flipbook_auto_9_output-1.png" width="432" /&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-cars_flipbook-auto[
+
+```r
+cars %&gt;%  
+  ggplot() +  
+  ggthemes::theme_solarized(base_size = 15) +  
+  aes(x = speed) +  
+  aes(y = dist) +  
+  geom_point(size = 6,  
+             fill = "plum4",  
+             shape = 21,  
+             alpha = .75) +  
+  labs(title = "The 'cars' dataset") +  
+  labs(subtitle = "Speed and Stopping distance are correlated") +  
+  labs(x = "Speed (mph)") +  
+* labs(y = "Distance (feet)")
+```
+]
+ 
+.panel2-cars_flipbook-auto[
+&lt;img src="hex_sticker_making_files/figure-html/cars_flipbook_auto_10_output-1.png" width="432" /&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-cars_flipbook-auto[
+
+```r
+cars %&gt;%  
+  ggplot() +  
+  ggthemes::theme_solarized(base_size = 15) +  
+  aes(x = speed) +  
+  aes(y = dist) +  
+  geom_point(size = 6,  
+             fill = "plum4",  
+             shape = 21,  
+             alpha = .75) +  
+  labs(title = "The 'cars' dataset") +  
+  labs(subtitle = "Speed and Stopping distance are correlated") +  
+  labs(x = "Speed (mph)") +  
+  labs(y = "Distance (feet)") +  
+* theme(plot.title.position = "plot")
+```
+]
+ 
+.panel2-cars_flipbook-auto[
+&lt;img src="hex_sticker_making_files/figure-html/cars_flipbook_auto_11_output-1.png" width="432" /&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-cars_flipbook-auto[
+
+```r
+cars %&gt;%  
+  ggplot() +  
+  ggthemes::theme_solarized(base_size = 15) +  
+  aes(x = speed) +  
+  aes(y = dist) +  
+  geom_point(size = 6,  
+             fill = "plum4",  
+             shape = 21,  
+             alpha = .75) +  
+  labs(title = "The 'cars' dataset") +  
+  labs(subtitle = "Speed and Stopping distance are correlated") +  
+  labs(x = "Speed (mph)") +  
+  labs(y = "Distance (feet)") +  
+  theme(plot.title.position = "plot") +  
+* cowplot::draw_label(label = "flipbookr", )
+```
+]
+ 
+.panel2-cars_flipbook-auto[
+&lt;img src="hex_sticker_making_files/figure-html/cars_flipbook_auto_12_output-1.png" width="432" /&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-cars_flipbook-auto[
+
+```r
+cars %&gt;%  
+  ggplot() +  
+  ggthemes::theme_solarized(base_size = 15) +  
+  aes(x = speed) +  
+  aes(y = dist) +  
+  geom_point(size = 6,  
+             fill = "plum4",  
+             shape = 21,  
+             alpha = .75) +  
+  labs(title = "The 'cars' dataset") +  
+  labs(subtitle = "Speed and Stopping distance are correlated") +  
+  labs(x = "Speed (mph)") +  
+  labs(y = "Distance (feet)") +  
+  theme(plot.title.position = "plot") +  
+  cowplot::draw_label(label = "flipbookr", ) -&gt;  
+*p1
+```
+]
+ 
+.panel2-cars_flipbook-auto[
+
+]
+
+---
+count: false
+ 
+
+.panel1-cars_flipbook-auto[
+
+```r
+cars %&gt;%  
+  ggplot() +  
+  ggthemes::theme_solarized(base_size = 15) +  
+  aes(x = speed) +  
+  aes(y = dist) +  
+  geom_point(size = 6,  
+             fill = "plum4",  
+             shape = 21,  
+             alpha = .75) +  
+  labs(title = "The 'cars' dataset") +  
+  labs(subtitle = "Speed and Stopping distance are correlated") +  
+  labs(x = "Speed (mph)") +  
+  labs(y = "Distance (feet)") +  
+  theme(plot.title.position = "plot") +  
+  cowplot::draw_label(label = "flipbookr", ) -&gt;  
+p1  
+
+*cowplot::ggdraw(p1)
+```
+]
+ 
+.panel2-cars_flipbook-auto[
+&lt;img src="hex_sticker_making_files/figure-html/cars_flipbook_auto_14_output-1.png" width="432" /&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-cars_flipbook-auto[
+
+```r
+cars %&gt;%  
+  ggplot() +  
+  ggthemes::theme_solarized(base_size = 15) +  
+  aes(x = speed) +  
+  aes(y = dist) +  
+  geom_point(size = 6,  
+             fill = "plum4",  
+             shape = 21,  
+             alpha = .75) +  
+  labs(title = "The 'cars' dataset") +  
+  labs(subtitle = "Speed and Stopping distance are correlated") +  
+  labs(x = "Speed (mph)") +  
+  labs(y = "Distance (feet)") +  
+  theme(plot.title.position = "plot") +  
+  cowplot::draw_label(label = "flipbookr", ) -&gt;  
+p1  
+
+cowplot::ggdraw(p1) +  
+* cowplot::draw_label("Flipbookr", color = "#D0B0B0",
+*            size = 100, angle = 45)
+```
+]
+ 
+.panel2-cars_flipbook-auto[
+&lt;img src="hex_sticker_making_files/figure-html/cars_flipbook_auto_15_output-1.png" width="432" /&gt;
+]
+
+&lt;style&gt;
+.panel1-cars_flipbook-auto {
+  color: black;
+  width: 38.6060606060606%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+.panel2-cars_flipbook-auto {
+  color: black;
+  width: 59.3939393939394%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+.panel3-cars_flipbook-auto {
+  color: black;
+  width: NA%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+&lt;/style&gt;
+
+
+
+
+
+---
+
+## The still images:
+
+&lt;img src="hex_sticker_making_files/figure-html/stills-1.png" width="14.2%" /&gt;&lt;img src="hex_sticker_making_files/figure-html/stills-2.png" width="14.2%" /&gt;&lt;img src="hex_sticker_making_files/figure-html/stills-3.png" width="14.2%" /&gt;&lt;img src="hex_sticker_making_files/figure-html/stills-4.png" width="14.2%" /&gt;&lt;img src="hex_sticker_making_files/figure-html/stills-5.png" width="14.2%" /&gt;&lt;img src="hex_sticker_making_files/figure-html/stills-6.png" width="14.2%" /&gt;&lt;img src="hex_sticker_making_files/figure-html/stills-7.png" width="14.2%" /&gt;&lt;img src="hex_sticker_making_files/figure-html/stills-8.png" width="14.2%" /&gt;&lt;img src="hex_sticker_making_files/figure-html/stills-9.png" width="14.2%" /&gt;&lt;img src="hex_sticker_making_files/figure-html/stills-10.png" width="14.2%" /&gt;&lt;img src="hex_sticker_making_files/figure-html/stills-11.png" width="14.2%" /&gt;&lt;img src="hex_sticker_making_files/figure-html/stills-12.png" width="14.2%" /&gt;&lt;img src="hex_sticker_making_files/figure-html/stills-13.png" width="14.2%" /&gt;
+
+
+---
+
+# Composites - hex background and plot
+
+---
+
+
+```r
+"hex_sticker_making_files/figure-html/" %&gt;% 
+list.files(path = .,
+           pattern = "cars_flipbook")
+```
+
+```
+ [1] "cars_flipbook_auto_10_output-1.png" "cars_flipbook_auto_11_output-1.png"
+ [3] "cars_flipbook_auto_2_output-1.png"  "cars_flipbook_auto_3_output-1.png" 
+ [5] "cars_flipbook_auto_4_output-1.png"  "cars_flipbook_auto_5_output-1.png" 
+ [7] "cars_flipbook_auto_6_output-1.png"  "cars_flipbook_auto_7_output-1.png" 
+ [9] "cars_flipbook_auto_8_output-1.png"  "cars_flipbook_auto_9_output-1.png" 
+[11] "cars_flipbook-1.png"               
+```
+
+```r
+magick::image_read("hex_sticker_making_files/figure-html/cars_flipbook_auto_3_output-1.png") %&gt;% 
+  magick::image_scale(geometry = "X140") -&gt;
+  first_png
+
+magick::image_read("hex_background.png") %&gt;% 
+  magick::image_scale(geometry = "X400") %&gt;% 
+  magick::image_composite(first_png, offset = "+112+130")
+```
+
+&lt;img src="hex_sticker_making_files/figure-html/unnamed-chunk-2-1.png" width="152" /&gt;
+
+
+---
+
+The animation
+
+
+---
+
+
+
+
+```r
+magick::image_read("hex_sticker_making_files/figure-html/cars_flipbook_auto_4_output-1.png") %&gt;% 
+  magick::image_scale(geometry = "X140") -&gt;
+  first_png
+
+
+magick::image_read("hex_background.png") %&gt;% 
+  magick::image_scale(geometry = "X400") %&gt;% 
+  magick::image_composite(first_png, offset = "+112+130")
+```
+
+&lt;img src="hex_sticker_making_files/figure-html/unnamed-chunk-3-1.png" width="152" /&gt;
+
+---
+
+# the static hex sticker
+
+Now let's have a look at the static hex sticker that Britt Woodrum created.  Someone at the RStudio conference suggested that instead of hex stickers, I should create hex pads of paper! Great idea, a bit ambitious.  But that was a source of inspiration.
+
+Britt pushed for hex branding after watching the ["The development of 'datos' package for the R4DS Spanish translation"](https://rstudio.com/resources/rstudioconf-2020/the-development-of-datos-package-for-the-r4ds-spanish-translation/).  The creators of "datos" prioritzed the hex sticker!
+
+Britt worked on several version and we've kind of settled on this one.  I love what Britt created!  Colors were inspired by the RLadies Xaringan theme - which I used pretty consistently in the early flipbooks.  Emi Tanaka's pick really.  
+
+---
+
+count: false
+ 
+
+.panel1-britt-auto[
+
+```r
+*magick::image_read("flipbook_sticker_britt.png")
+```
+]
+ 
+.panel2-britt-auto[
+&lt;img src="hex_sticker_making_files/figure-html/britt_auto_1_output-1.png" width="667" /&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-britt-auto[
+
+```r
+magick::image_read("flipbook_sticker_britt.png") %&gt;%  
+* magick::image_rotate(10)
+```
+]
+ 
+.panel2-britt-auto[
+&lt;img src="hex_sticker_making_files/figure-html/britt_auto_2_output-1.png" width="773" /&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-britt-auto[
+
+```r
+magick::image_read("flipbook_sticker_britt.png") %&gt;%  
+  magick::image_rotate(10) %&gt;%  
+* magick::image_rotate(-20)
+```
+]
+ 
+.panel2-britt-auto[
+&lt;img src="hex_sticker_making_files/figure-html/britt_auto_3_output-1.png" width="992" /&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-britt-auto[
+
+```r
+magick::image_read("flipbook_sticker_britt.png") %&gt;%  
+  magick::image_rotate(10) %&gt;%  
+  magick::image_rotate(-20) %&gt;%  
+* magick::image_rotate(20)
+```
+]
+ 
+.panel2-britt-auto[
+&lt;img src="hex_sticker_making_files/figure-html/britt_auto_4_output-1.png" width="1272" /&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-britt-auto[
+
+```r
+magick::image_read("flipbook_sticker_britt.png") %&gt;%  
+  magick::image_rotate(10) %&gt;%  
+  magick::image_rotate(-20) %&gt;%  
+  magick::image_rotate(20) -&gt;  
+* rotated
+```
+]
+ 
+.panel2-britt-auto[
+
+]
+
+---
+count: false
+ 
+
+.panel1-britt-auto[
+
+```r
+magick::image_read("flipbook_sticker_britt.png") %&gt;%  
+  magick::image_rotate(10) %&gt;%  
+  magick::image_rotate(-20) %&gt;%  
+  magick::image_rotate(20) -&gt;  
+  rotated  
+
+*magick::image_read("flipbook_sticker_britt.png")
+```
+]
+ 
+.panel2-britt-auto[
+&lt;img src="hex_sticker_making_files/figure-html/britt_auto_6_output-1.png" width="667" /&gt;
+]
+
+&lt;style&gt;
+.panel1-britt-auto {
+  color: black;
+  width: 38.6060606060606%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+.panel2-britt-auto {
+  color: black;
+  width: 59.3939393939394%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+.panel3-britt-auto {
+  color: black;
+  width: NA%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+&lt;/style&gt;
+
+
+
+
+
+
+---
+
+
+Thank to these folks for ideas and how-to (link):
+
+- Britt Woodrum
+- [Brian Shalloway](https://github.com/EvaMaeRey/flipbookr/issues/21)
+- [Guangchuang Yu](https://github.com/GuangchuangYu/hexSticker)
+- [Alison Presmanes Hill](https://arm.rbind.io/slides/xaringan.html#90)
+
+And to creators and contributors to:
+
+- ggplot2
+- xaringan
+- xaringanthemer
+- [magick](https://cran.r-project.org/web/packages/magick/vignettes/intro.html)
+
+
+&lt;style type="text/css"&gt;
+.remark-code{line-height: 1.5; font-size: 80%}
+
+@media print {
+  .has-continuation {
+    display: block;
+  }
+}
+&lt;/style&gt;
+    </textarea>
+<style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
+<script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
+<script>var slideshow = remark.create({
+"ratio": "16:10",
+"highlightStyle": "github",
+"highlightLines": true,
+"countIncrementalSlides": false
+});
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
+  window.dispatchEvent(new Event('resize'));
+});
+(function(d) {
+  var s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+  if (!r) return;
+  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
+  d.head.appendChild(s);
+})(document);
+
+(function(d) {
+  var el = d.getElementsByClassName("remark-slides-area");
+  if (!el) return;
+  var slide, slides = slideshow.getSlides(), els = el[0].children;
+  for (var i = 1; i < slides.length; i++) {
+    slide = slides[i];
+    if (slide.properties.continued === "true" || slide.properties.count === "false") {
+      els[i - 1].className += ' has-continuation';
+    }
+  }
+  var s = d.createElement("style");
+  s.type = "text/css"; s.innerHTML = "@media print { .has-continuation { display: none; } }";
+  d.head.appendChild(s);
+})(document);
+// delete the temporary CSS (for displaying all slides initially) when the user
+// starts to view slides
+(function() {
+  var deleted = false;
+  slideshow.on('beforeShowSlide', function(slide) {
+    if (deleted) return;
+    var sheets = document.styleSheets, node;
+    for (var i = 0; i < sheets.length; i++) {
+      node = sheets[i].ownerNode;
+      if (node.dataset["target"] !== "print-only") continue;
+      node.parentNode.removeChild(node);
+    }
+    deleted = true;
+  });
+})();
+(function() {
+  "use strict"
+  // Replace <script> tags in slides area to make them executable
+  var scripts = document.querySelectorAll(
+    '.remark-slides-area .remark-slide-container script'
+  );
+  if (!scripts.length) return;
+  for (var i = 0; i < scripts.length; i++) {
+    var s = document.createElement('script');
+    var code = document.createTextNode(scripts[i].textContent);
+    s.appendChild(code);
+    var scriptAttrs = scripts[i].attributes;
+    for (var j = 0; j < scriptAttrs.length; j++) {
+      s.setAttribute(scriptAttrs[j].name, scriptAttrs[j].value);
+    }
+    scripts[i].parentElement.replaceChild(s, scripts[i]);
+  }
+})();
+(function() {
+  var links = document.getElementsByTagName('a');
+  for (var i = 0; i < links.length; i++) {
+    if (/^(https?:)?\/\//.test(links[i].getAttribute('href'))) {
+      links[i].target = '_blank';
+    }
+  }
+})();
+// adds .remark-code-has-line-highlighted class to <pre> parent elements
+// of code chunks containing highlighted lines with class .remark-code-line-highlighted
+(function(d) {
+  const hlines = d.querySelectorAll('.remark-code-line-highlighted');
+  const preParents = [];
+  const findPreParent = function(line, p = 0) {
+    if (p > 1) return null; // traverse up no further than grandparent
+    const el = line.parentElement;
+    return el.tagName === "PRE" ? el : findPreParent(el, ++p);
+  };
+
+  for (let line of hlines) {
+    let pre = findPreParent(line);
+    if (pre && !preParents.includes(pre)) preParents.push(pre);
+  }
+  preParents.forEach(p => p.classList.add("remark-code-has-line-highlighted"));
+})(document);</script>
+
+<script>
+slideshow._releaseMath = function(el) {
+  var i, text, code, codes = el.getElementsByTagName('code');
+  for (i = 0; i < codes.length;) {
+    code = codes[i];
+    if (code.parentNode.tagName !== 'PRE' && code.childElementCount === 0) {
+      text = code.textContent;
+      if (/^\\\((.|\s)+\\\)$/.test(text) || /^\\\[(.|\s)+\\\]$/.test(text) ||
+          /^\$\$(.|\s)+\$\$$/.test(text) ||
+          /^\\begin\{([^}]+)\}(.|\s)+\\end\{[^}]+\}$/.test(text)) {
+        code.outerHTML = code.innerHTML;  // remove <code></code>
+        continue;
+      }
+    }
+    i++;
+  }
+};
+slideshow._releaseMath(document);
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>

@@ -144,7 +144,10 @@ ggsave(filename = "my_plot.png", plot = g,
 ---
 
 
-```{r}
+```{r, echo = F, eval = F}
+# this is to create the visual preview
+
+pagedown::chrome_print("magick.html")
 
 ```
 
