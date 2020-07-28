@@ -18,7 +18,7 @@ output:
 ```{r, include = F}
 # This is the recommended set up for flipbooks
 # you might think about setting cache to TRUE as you gain practice --- building flipbooks from scratch can be time consuming
-knitr::opts_chunk$set(fig.width = 6, message = FALSE, warning = FALSE, comment = "", cache = T, fig.retina = 3, dev.args = list(bg = "transparent"))
+knitr::opts_chunk$set(fig.width = 6, message = FALSE, warning = FALSE, comment = "", cache = F, fig.retina = 3, dev.args = list(bg = "transparent"))
 library(flipbookr)
 library(tidyverse)
 ```
@@ -122,9 +122,9 @@ hex_vertices %>%
   ggplot() +
   aes(x = x) +
   aes(y = y) +
-  geom_polygon(color = "steelblue4",
+  geom_polygon(color = "thistle4",
                size = 3,
-               fill = "aliceblue") +
+               fill = "thistle1") +
   coord_equal() +
   theme_void() ->
 g
@@ -163,7 +163,7 @@ hex_vertices %>%
   aes(x = x) +
   aes(y = y) +
   geom_polygon(
-    color = "magenta",
+    color = "palegreen4",
     size = 3,
     # for a frame only 
     fill = "transparent" 
@@ -229,43 +229,35 @@ cowplot::ggdraw(p1) +
 
 ---
 
-```{r}
-"hex_sticker_making_files/figure-html/" %>% 
-list.files(path = .,
-           pattern = "cars_flipbook")
+`r chunk_reveal("build_animated_hex")`
 
+```{r build_animated_hex, include = F}
+the_path <- "hex_sticker_making_files/figure-html/"  
+the_path %>%  
+  list.files(path = .,  
+           pattern = "cars_flipbook_auto") ->  
+  plot_pngs  
 
-magick::image_read("hex_sticker_making_files/figure-html/cars_flipbook_auto_3_output-1.png") %>% 
-  magick::image_scale(geometry = "X140") ->
-  first_png
+magick::image_read(paste0(the_path, "/", plot_pngs)) %>%  
+  magick::image_scale(geometry = "X170") ->  
+the_steps  
 
-magick::image_read("hex_background.png") %>% 
-  magick::image_scale(geometry = "X400") %>% 
-  magick::image_composite(first_png, offset = "+112+130")
+magick::image_read("hex_background.png") %>%  
+  magick::image_scale(geometry = "X400") %>%  
+  magick::image_composite(the_steps, offset = "+112+130") %>%  
+  magick::image_write_gif(path = paste0("my_animated_hex.gif"),
+                          delay = .4)  
 ```
-
 
 ---
 
-The animation
+`r chunk_reveal("animation", break_type = 1)`
 
-
----
-
-
-
-```{r}
-magick::image_read("hex_sticker_making_files/figure-html/cars_flipbook_auto_4_output-1.png") %>% 
-  magick::image_scale(geometry = "X140") ->
-  first_png
-
-
-magick::image_read("hex_background.png") %>% 
-  magick::image_scale(geometry = "X400") %>% 
-  magick::image_composite(first_png, offset = "+112+130")
-
-
+```{r animation, include=F}
+knitr::include_graphics("my_animated_hex.gif")
 ```
+
+
 
 ---
 
